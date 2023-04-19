@@ -2,7 +2,7 @@
 
 Learning POC project to view solana accounts/transactions
 
-Page: http://localhost:3000/solview/#/account/XXXXX
+Page: https://airicyu.github.io/solview/#/account/XXXXX
 
 <--- replace `XXXXX` with account address
 
