@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/solview/static/css/main.4e076077.css",
+    "main.js": "/solview/static/js/main.9619684e.js",
+    "index.html": "/solview/index.html",
+    "main.4e076077.css.map": "/solview/static/css/main.4e076077.css.map",
+    "main.9619684e.js.map": "/solview/static/js/main.9619684e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4e076077.css",
+    "static/js/main.9619684e.js"
+  ]
+}
