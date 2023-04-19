@@ -6,6 +6,7 @@ import { Web3Context } from "../contexts/web3Context";
 import { Card, Button } from "antd";
 import { InstructionWidget } from "../components/InstructionWidget";
 import { TransaciotnWidget } from "../components/TransactionWidget";
+import { Spin } from "antd";
 
 export const Account = (props: any) => {
   let { accountAddress } = useParams();
@@ -18,31 +19,38 @@ export const Account = (props: any) => {
 
   let [lastLoadedTrxHash, setLastLoadedTrxHash] = useState<string | null>(null);
 
+  let [isLoading, setIsLoading] = useState<boolean>(false);
+
   useEffect(() => {
     (async () => {
       if (accountAddress) {
-        const trxHashes = (
-          await connection.getSignaturesForAddress(
-            new PublicKey(accountAddress),
-            {
-              //before?: TransactionSignature;
-              limit: 10,
-            }
-          )
-        ).map((payload) => payload.signature);
+        setIsLoading(true);
+        try {
+          const trxHashes = (
+            await connection.getSignaturesForAddress(
+              new PublicKey(accountAddress),
+              {
+                //before?: TransactionSignature;
+                limit: 10,
+              }
+            )
+          ).map((payload) => payload.signature);
 
-        const trxes = (
-          await connection.getParsedTransactions(trxHashes, {
-            maxSupportedTransactionVersion: 0,
-          })
-        ).map((trx, i) => {
-          return Object.assign({}, trx, { hash: trxHashes[i] });
-        });
-        if (trxes) {
-          setTransactions(trxes);
-          setLastLoadedTrxHash(trxes[trxes.length - 1].hash);
+          const trxes = (
+            await connection.getParsedTransactions(trxHashes, {
+              maxSupportedTransactionVersion: 0,
+            })
+          ).map((trx, i) => {
+            return Object.assign({}, trx, { hash: trxHashes[i] });
+          });
+          if (trxes) {
+            setTransactions(trxes);
+            setLastLoadedTrxHash(trxes[trxes.length - 1].hash);
+          }
+          console.log(trxes);
+        } finally {
+          setIsLoading(false);
         }
-        console.log(trxes);
       }
     })();
   }, [accountAddress, connection]);
@@ -50,27 +58,32 @@ export const Account = (props: any) => {
   const loadMoreTransactions = useCallback(() => {
     (async () => {
       if (accountAddress) {
-        const trxHashes = (
-          await connection.getSignaturesForAddress(
-            new PublicKey(accountAddress),
-            {
-              before: lastLoadedTrxHash ?? undefined,
-              limit: 10,
-            }
-          )
-        ).map((payload) => payload.signature);
+        setIsLoading(true);
+        try {
+          const trxHashes = (
+            await connection.getSignaturesForAddress(
+              new PublicKey(accountAddress),
+              {
+                before: lastLoadedTrxHash ?? undefined,
+                limit: 10,
+              }
+            )
+          ).map((payload) => payload.signature);
 
-        const trxes = (
-          await connection.getParsedTransactions(trxHashes, {
-            maxSupportedTransactionVersion: 0,
-          })
-        ).map((trx, i) => {
-          return Object.assign({}, trx, { hash: trxHashes[i] });
-        });
+          const trxes = (
+            await connection.getParsedTransactions(trxHashes, {
+              maxSupportedTransactionVersion: 0,
+            })
+          ).map((trx, i) => {
+            return Object.assign({}, trx, { hash: trxHashes[i] });
+          });
 
-        if (trxes) {
-          setTransactions([...transactions, ...trxes]);
-          setLastLoadedTrxHash(trxes[trxes.length - 1].hash);
+          if (trxes) {
+            setTransactions([...transactions, ...trxes]);
+            setLastLoadedTrxHash(trxes[trxes.length - 1].hash);
+          }
+        } finally {
+          setIsLoading(false);
         }
       }
     })();
@@ -78,6 +91,7 @@ export const Account = (props: any) => {
 
   return (
     <>
+      <Spin spinning={isLoading} />
       <Card title={accountAddress}>
         Transactions:
         <hr />
@@ -94,7 +108,11 @@ export const Account = (props: any) => {
             );
           })}
         </div>
-        <Button type="primary" onClick={loadMoreTransactions}>
+        <Button
+          type="primary"
+          onClick={loadMoreTransactions}
+          loading={isLoading}
+        >
           Load more Transactions ...
         </Button>
       </Card>
