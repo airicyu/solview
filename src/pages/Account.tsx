@@ -45,9 +45,9 @@ export const Account = (props: any) => {
           });
           if (trxes) {
             setTransactions(trxes);
-            const lastHash = trxes.map((_) => _.hash).findLast((_) => !!_);
-            if (lastHash) {
-              setLastLoadedTrxHash(lastHash);
+            const hashes = trxes.map((_) => _.hash).filter((_) => !!_);
+            if (hashes[hashes.length - 1]) {
+              setLastLoadedTrxHash(hashes[hashes.length - 1]);
             }
           }
           console.log(trxes);
@@ -83,9 +83,9 @@ export const Account = (props: any) => {
 
           if (trxes) {
             setTransactions([...transactions, ...trxes]);
-            const lastHash = trxes.map((_) => _.hash).findLast((_) => !!_);
-            if (lastHash) {
-              setLastLoadedTrxHash(lastHash);
+            const hashes = trxes.map((_) => _.hash).filter((_) => !!_);
+            if (hashes[hashes.length - 1]) {
+              setLastLoadedTrxHash(hashes[hashes.length - 1]);
             }
           }
         } finally {
@@ -98,8 +98,14 @@ export const Account = (props: any) => {
   return (
     <>
       <Spin spinning={isLoading} />
-      <Card title={accountAddress}>
-        Transactions:
+      <Card
+        title={
+          <div>
+            Address: <h2>{accountAddress}</h2>
+          </div>
+        }
+      >
+        <h1>Transactions</h1>
         <hr />
         <div>
           {transactions.map((transaction: any, i: number) => {
