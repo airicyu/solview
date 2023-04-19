@@ -45,7 +45,10 @@ export const Account = (props: any) => {
           });
           if (trxes) {
             setTransactions(trxes);
-            setLastLoadedTrxHash(trxes[trxes.length - 1].hash);
+            const lastHash = trxes.map((_) => _.hash).findLast((_) => !!_);
+            if (lastHash) {
+              setLastLoadedTrxHash(lastHash);
+            }
           }
           console.log(trxes);
         } finally {
@@ -80,7 +83,10 @@ export const Account = (props: any) => {
 
           if (trxes) {
             setTransactions([...transactions, ...trxes]);
-            setLastLoadedTrxHash(trxes[trxes.length - 1].hash);
+            const lastHash = trxes.map((_) => _.hash).findLast((_) => !!_);
+            if (lastHash) {
+              setLastLoadedTrxHash(lastHash);
+            }
           }
         } finally {
           setIsLoading(false);
