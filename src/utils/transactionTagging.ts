@@ -11,15 +11,15 @@ export const transactionTagging = (
       .map((programId) => programLabels.program[programId] ?? programId);
     console.log(programNames);
 
+    if (programNames.includes("Vote Program")) {
+      return "Vote";
+    }
+
     if (programNames.find((name) => name.startsWith("Jupiter Aggregator "))) {
       return "Jupiter";
     }
 
-    if (
-      programNames.find((name) =>
-        name.startsWith("SHARKobtfF1bHhxD2eqftjHBdVSCbKo9JtgK71FhELP")
-      )
-    ) {
+    if (programNames.includes("SHARKobtfF1bHhxD2eqftjHBdVSCbKo9JtgK71FhELP")) {
       return "Sharky";
     }
 
