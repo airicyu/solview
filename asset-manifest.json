@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/solview/static/css/main.4e076077.css",
-    "main.js": "/solview/static/js/main.bfbb32de.js",
+    "main.js": "/solview/static/js/main.ca0be2ce.js",
     "index.html": "/solview/index.html",
     "main.4e076077.css.map": "/solview/static/css/main.4e076077.css.map",
-    "main.bfbb32de.js.map": "/solview/static/js/main.bfbb32de.js.map"
+    "main.ca0be2ce.js.map": "/solview/static/js/main.ca0be2ce.js.map"
   },
   "entrypoints": [
     "static/css/main.4e076077.css",
-    "static/js/main.bfbb32de.js"
+    "static/js/main.ca0be2ce.js"
   ]
 }
